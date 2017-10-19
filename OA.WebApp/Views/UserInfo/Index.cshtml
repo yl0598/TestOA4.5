@@ -1,0 +1,111 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <link href="~/Content/themes/default/easyui.css" rel="stylesheet" />
+    <link href="~/Content/themes/icon.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/jquery.easyui.min.js"></script>
+    <script src="~/Scripts/easyui-lang-zh_CN.js"></script>
+
+
+</head>
+<body>
+    <h2>用户信息表</h2>
+
+    <div style="margin:20px 100px auto; "></div>
+    <div id="tb">
+        <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="Add()">增加</a>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-cut" plain="true" onclick="Delete()">删除</a>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-save" plain="true" onclick="Save()">保存</a>
+    </div>
+
+
+    <div class="panel datagrid panel-htop" style="padding:50px 50px;">
+        <table id="dg" title="用户表" class="easyui-datagrid" style="width:700px;height:400px;margin:50px 50px;"
+               idField="ID" pageSize="5" pageList="[5,10,15]" fitColumns="true" rownumbers="true" pagination="true" toolbar="#tb" url="/UserInfo/GetUserInfo">
+            <thead>
+
+
+                <tr>
+                    <th field="ck" checkbox="true" align="left" width="50"></th>
+                    <th field="ID" title="编号" width="80">编号</th>
+                    <th field="UName" title="姓名" width="120">姓名</th>
+                    <th field="UPwd" title="密码" width="120">密码</th>
+                    <th field="Remark" title="备注" width="120">备注</th>
+                    <th field="SubTime" title="时间" width="80">时间</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+    <script type="text/javascript">
+            $(function () {
+                var pager = $('#dg').datagrid().datagrid('getPager');	// get the pager of datagrid
+                pager.pagination({
+                    buttons: [{
+                        iconCls: 'icon-search',
+                        handler: function () {
+                            alert('search');
+                        }
+                    }, {
+                        iconCls: 'icon-add',
+                        handler: function () {
+                            alert('add');
+                        }
+                    }, {
+                        iconCls: 'icon-edit',
+                        handler: function () {
+                            alert('edit');
+                        }
+                    }]
+                });
+            })
+            function Delete() {
+
+                var rows = $("#dg").datagrid("getSelections");
+                if (!rows || rows.length == 0) {
+                    $.messager.alert("提醒", "请选择删除记录", "error");
+                    return;
+                }
+                if ($.messager.confirm("提示", "确定删除吗", function (r) {
+                    if (r) {
+                        //获取要删除的记录编号
+                        var strid = "";
+                        for (var i = 0; i < rows.length; i++){
+                            strid += rows[i].ID + ",";//1,2,3,
+
+                        }
+
+                        strid = strid.substr(0, strid.length - 1);//去掉最后的逗号
+
+                        $.ajax({
+                            url: "/UserInfo/DeleteUserInfo",
+                            method: "Post",
+                            data: { "strid": strid },
+                            success: function (text) {
+                                if (text == "OK") {
+                                    $("#dg").datagrid("reload");
+                                    
+                                }
+                            }
+
+                        });
+
+                      //  $.messager.alert("提示","删除成功");
+                    }
+                }));
+            }
+            function Add() { }
+            function Save() { }
+
+    </script>
+</body>
+
+</html>
