@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using OA.Model;
 using OA.Model.Enum;
 
 namespace OA.WebApp.Controllers
@@ -55,6 +56,21 @@ namespace OA.WebApp.Controllers
             }
 
 
+        }
+
+        #endregion
+        #region 添加用户信息
+
+        public ActionResult AddUserInfo(UserInfo userinfo)
+        {
+            userinfo.SubTime = DateTime.Now;
+            userinfo.ModifiedOn = DateTime.Now;
+            userinfo.Sort ="0";
+            userinfo.DelFlag = 0;
+            userInfoService.AddEntity(userinfo);
+
+            //  return Redirect("Index");
+            return Content("ok");
         }
 
         #endregion

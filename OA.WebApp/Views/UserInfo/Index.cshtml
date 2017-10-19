@@ -14,7 +14,9 @@
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
     <script src="~/Scripts/jquery.easyui.min.js"></script>
     <script src="~/Scripts/easyui-lang-zh_CN.js"></script>
+    
 
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
 
 </head>
 <body>
@@ -32,8 +34,6 @@
         <table id="dg" title="用户表" class="easyui-datagrid" style="width:700px;height:400px;margin:50px 50px;"
                idField="ID" pageSize="5" pageList="[5,10,15]" fitColumns="true" rownumbers="true" pagination="true" toolbar="#tb" url="/UserInfo/GetUserInfo">
             <thead>
-
-
                 <tr>
                     <th field="ck" checkbox="true" align="left" width="50"></th>
                     <th field="ID" title="编号" width="80">编号</th>
@@ -44,68 +44,107 @@
                 </tr>
             </thead>
         </table>
+           
+        
+    </div>
+
+    <div id="addDiv">
+        @using(Ajax.BeginForm("AddUserInfo", new { }, new AjaxOptions() { Confirm = "你确定添加吗？", HttpMethod = "post", OnSuccess = "afterAdd" }, new { id = "addForm" }))
+        {
+            <table>
+                <tr>
+                    <td>用户名</td>
+                    <td><input type="text" name="UName" />
+                    <td>
+                </tr>
+                <tr>
+                    <td>密码</td>
+                    <td><input type="password" name="UPwd" /></td>
+                </tr>
+                <tr>
+                    <td>备注</td>
+                    <td><input type="text" name="Remark" /></td>
+                </tr>
+            </table>
+        }
     </div>
     <script type="text/javascript">
-            $(function () {
-                var pager = $('#dg').datagrid().datagrid('getPager');	// get the pager of datagrid
-                pager.pagination({
-                    buttons: [{
-                        iconCls: 'icon-search',
-                        handler: function () {
-                            alert('search');
-                        }
-                    }, {
-                        iconCls: 'icon-add',
-                        handler: function () {
-                            alert('add');
-                        }
-                    }, {
-                        iconCls: 'icon-edit',
-                        handler: function () {
-                            alert('edit');
-                        }
-                    }]
-                });
-            })
-            function Delete() {
+        $(function () {
+            $("#addDiv").css("display", "none");
+        });
+        function Delete() {
 
-                var rows = $("#dg").datagrid("getSelections");
-                if (!rows || rows.length == 0) {
-                    $.messager.alert("提醒", "请选择删除记录", "error");
-                    return;
-                }
-                if ($.messager.confirm("提示", "确定删除吗", function (r) {
-                    if (r) {
-                        //获取要删除的记录编号
-                        var strid = "";
-                        for (var i = 0; i < rows.length; i++){
-                            strid += rows[i].ID + ",";//1,2,3,
-
-                        }
-
-                        strid = strid.substr(0, strid.length - 1);//去掉最后的逗号
-
-                        $.ajax({
-                            url: "/UserInfo/DeleteUserInfo",
-                            method: "Post",
-                            data: { "strid": strid },
-                            success: function (text) {
-                                if (text == "OK") {
-                                    $("#dg").datagrid("reload");
-                                    
-                                }
-                            }
-
-                        });
-
-                      //  $.messager.alert("提示","删除成功");
-                    }
-                }));
+            var rows = $("#dg").datagrid("getSelections");
+            if (!rows || rows.length == 0) {
+                $.messager.alert("提醒", "请选择删除记录", "error");
+                return;
             }
-            function Add() { }
-            function Save() { }
+            if ($.messager.confirm("提示", "确定删除吗", function (r) {
+                if (r) {
+                    //获取要删除的记录编号
+                    var strid = "";
+                    for (var i = 0; i < rows.length; i++) {
+                        strid += rows[i].ID + ",";//1,2,3,
+
+                    }
+
+                    strid = strid.substr(0, strid.length - 1);//去掉最后的逗号
+
+                    $.ajax({
+                        url: "/UserInfo/DeleteUserInfo",
+                        method: "Post",
+                        data: { "strid": strid },
+                        success: function (text) {
+                            if (text == "OK") {
+                                $("#dg").datagrid("reload");
+
+                            }
+                        }
+
+                    });
+
+                    //  $.messager.alert("提示","删除成功");
+                }
+            }));
+        }
+
+     
+        function Add() {
+            $("#addDiv").css("display", "block");
+            $("#addDiv").dialog({
+                title: "添加信息",
+                modal: true,
+                collapsible: true,
+                width: 300,
+                height: 200,
+                buttons: [{
+
+                    text: "Add",
+                    iconCls: "icon-ok",
+                    handler: function () {
+                        //  $.messager.alert("添加", "添加成功");
+                        $("#addForm").submit();
+                    }
+                }, {
+                    text: "Cancel",
+                    handler: function () {
+                        $("#addDiv").dialog("close");
+                    }
+                }]
+
+
+            });
+        }
+        function afterAdd() {
+
+            $("#addDiv").dialog("close");
+            $("#dg").datagrid("reload");
+        }
+        function Save() { }
 
     </script>
+ 
 </body>
+
 
 </html>
