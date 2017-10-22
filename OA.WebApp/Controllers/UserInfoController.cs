@@ -24,9 +24,10 @@ namespace OA.WebApp.Controllers
             int pageSize = int.Parse(Request["rows"]);
             int totalCount;
             short deletetype = (short)DeleteEnumType.Nomal;
-            var userlist = userInfoService.LoadPageEntities<int>(pageIndex, pageSize, out totalCount, c => c.DelFlag == deletetype, c => c.ID, true);
+            var userlist = userInfoService.LoadPageEntities<string>(pageIndex, pageSize, out totalCount, c => c.DelFlag == deletetype, c => c.Sort, true);
             var temp = from u in userlist
-                       select new { ID = u.ID, UName = u.UName, UPwd = u.UPwd, Remark = u.Remark, SubTime = u.SubTime };
+                       select new { ID = u.ID, UName = u.UName, UPwd = u.UPwd, Remark = u.Remark, SubTime = u.SubTime,DelFlag=u.DelFlag,Sort=u.Sort
+ };
 
 
             return Json(new { rows = temp, total = totalCount }, JsonRequestBehavior.AllowGet);
@@ -71,6 +72,21 @@ namespace OA.WebApp.Controllers
 
             //  return Redirect("Index");
             return Content("ok");
+        }
+
+        #endregion
+
+        #region 修改用户
+        public ActionResult EditUserInfo(UserInfo userInfo) {
+            userInfo.ModifiedOn = DateTime.Now;
+           if(userInfoService.UpdateEntity(userInfo))
+            {
+                return Content("OK");
+            }
+            else
+            {
+                return Content("not OK!");
+            }
         }
 
         #endregion

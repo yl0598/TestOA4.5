@@ -14,7 +14,7 @@
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
     <script src="~/Scripts/jquery.easyui.min.js"></script>
     <script src="~/Scripts/easyui-lang-zh_CN.js"></script>
-
+    <script src="~/Scripts/datapattern.js"></script>
     <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
 
  
@@ -27,11 +27,11 @@
     <div id="tb">
         <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="Add()">增加</a>
         <a href="#" class="easyui-linkbutton" iconCls="icon-cut" plain="true" onclick="Delete()">删除</a>
-        <a href="#" class="easyui-linkbutton" iconCls="icon-save" plain="true" onclick="Save()">保存</a>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-save" plain="true" onclick="Edit()">修改</a>
     </div>
 
 
-    <div class="panel datagrid panel-htop" style="padding:50px 50px;">
+    @*<div class="panel datagrid panel-htop" style="padding:50px 50px;">*@
         <table id="dg" title="用户表" class="easyui-datagrid" style="width:700px;height:400px;margin:50px 50px;"
                idField="ID" pageSize="5" pageList="[5,10,15]" fitColumns="true" rownumbers="true" pagination="true" toolbar="#tb" url="/UserInfo/GetUserInfo">
             <thead>
@@ -41,22 +41,24 @@
                     <th field="UName" title="姓名" width="120">姓名</th>
                     <th field="UPwd" title="密码" width="120">密码</th>
                     <th field="Remark" title="备注" width="120">备注</th>
-                    <th field="SubTime" title="时间" width="80">时间</th>
+                    <th field="SubTime" title="时间" width="80" formatter="formatdate" >时间</th>
                 </tr>
             </thead>
+            
         </table>
-           
+   
         
-    </div>
+    @*</div>*@
 
     <div id="addDiv">
-        @using(Ajax.BeginForm("AddUserInfo", new { }, new AjaxOptions() {  HttpMethod = "post", OnSuccess = "afterAdd" }, new { id = "addForm" }))
+        @using (Ajax.BeginForm("AddUserInfo", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterAdd" }, new { id = "addForm" }))
         {
             <table>
                 <tr>
                     <td>用户名</td>
                     <td><input type="text" name="UName" />
                     <td>
+
                 </tr>
                 <tr>
                     <td>密码</td>
@@ -69,10 +71,70 @@
             </table>
         }
     </div>
+        <div id="editDiv">
+            @using (Ajax.BeginForm("EditUserInfo", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterEdit" }, new { id = "editForm" }))
+            {
+                <table>
+                    
+                    <tr><td>ID</td><td><input id="txtID" name="ID" type="hidden" /></td>
+                         <td><input id="txtSubTime" name="SubTime" type="hidden" /></td>
+                    </tr>
+                    <tr>
+                        <td>用户名</td>
+                        <td><input type="text" name="UName" id="txtUName"/>
+                        <td>
+
+                    </tr>
+                    <tr>
+                        <td>密码</td>
+                        <td><input type="password" name="UPwd" id="txtUPwd"/></td>
+                    </tr>
+                    <tr>
+                        <td>状态</td>
+                        <td><input type="text" name="DelFlag" id="txtDelFlag" /></td>
+                    </tr>
+                    <tr>
+                        <td>排序</td>
+                        <td><input type="text" name="Sort" id="txtSort" /></td>
+                    </tr>
+                    <tr>
+                        <td>备注</td>
+                        <td><input type="text" name="Remark" id="txtRemark"/></td>
+                    </tr>
+                </table>
+            }
+        </div>
+
+
+    
     <script type="text/javascript">
         $(function () {
             $("#addDiv").css("display", "none");
+            $("#editDiv").css("display", "none");
+        //    $("#dg").datagrid({
+        //        columns: [[
+        //            {
+        //                field: 'SubTime', formatter: function (s, row, index) {
+        //                    if (!s) return new Date();
+        //                    var ss = (s.split('-'));
+        //                    var y = parseInt(ss[0], 10);
+        //                    var m = parseInt(ss[1], 10);
+        //                    var d = parseInt(ss[2], 10);
+        //                    if (!isNaN(y) && !isNaN(m) && !isNaN(d)) {
+        //                        return new Date(y, m - 1, d);
+        //                    } else {
+        //                        return new Date();
+        //                    }
+        //                }
+        //            }
+        //        ]]
+        //    });
+            
         });
+        function formatdate(date, row,index) {
+          
+            return (eval(date.replace(/\/Date\((\d+)\)\//gi,"new Date($1)"))).pattern("yyyy-M-d");
+        }
         function Delete() {
 
             var rows = $("#dg").datagrid("getSelections");
@@ -112,6 +174,7 @@
      
         function Add() {
             $("#addDiv").css("display", "block");
+            $("#addForm input").val("");
             $("#addDiv").dialog({
                 title: "添加信息",
                 modal: true,
@@ -140,8 +203,57 @@
 
             $("#addDiv").dialog("close");
             $("#dg").datagrid("reload");
+           
         }
-        function Save() { }
+
+        function Edit() {
+            var rows = $("#dg").datagrid("getSelections");
+            
+
+            if (rows.length != 1) {
+                $.messager.alert("提示", "请选择一条数据进行修改");
+            } else {
+                $("#editDiv").css("display", "block");
+                $("#addForm input").val("");
+                $("#txtUName").val(rows[0].UName);
+                $("#txtUPwd").val(rows[0].UPwd);
+                $("#txtRemark").val(rows[0].Remark);
+                $("#txtID").val(rows[0].ID);
+                $("#txtSubTime").val(rows[0].SubTime);
+                $("#txtSort").val(rows[0].Sort);
+                $("#txtDelFlag").val(rows[0].DelFlag);
+                $("#editDiv").dialog({
+                    title: "修改信息",
+                    modal: true,
+                    collapsible: true,
+                    width: 300,
+                    height: 250,
+                    buttons: [{
+
+                        text: "Edit",
+                        iconCls: "icon-ok",
+                        handler: function () {
+                            //  $.messager.alert("添加", "添加成功");
+                           
+                        }
+                    }, {
+                        text: "Cancel",
+                        handler: function () {
+                            $("#editDiv").dialog("close");
+                        }
+                    }]
+
+
+                });
+            }
+            
+
+        }
+        function afterEdit() {
+            $("#editDiv").dialog("close");
+            $("#dg").datagrid("reload");
+
+        }
 
     </script>
  
