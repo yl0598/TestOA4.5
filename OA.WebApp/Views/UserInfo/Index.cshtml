@@ -212,14 +212,16 @@
 
             if (rows.length != 1) {
                 $.messager.alert("提示", "请选择一条数据进行修改");
-            } else {
+                return;
+            }
+
                 $("#editDiv").css("display", "block");
                 $("#addForm input").val("");
                 $("#txtUName").val(rows[0].UName);
                 $("#txtUPwd").val(rows[0].UPwd);
                 $("#txtRemark").val(rows[0].Remark);
                 $("#txtID").val(rows[0].ID);
-                $("#txtSubTime").val(rows[0].SubTime);
+                $("#txtSubTime").val(ChangeDateFormat(rows[0].SubTime));
                 $("#txtSort").val(rows[0].Sort);
                 $("#txtDelFlag").val(rows[0].DelFlag);
                 $("#editDiv").dialog({
@@ -233,8 +235,14 @@
                         text: "Edit",
                         iconCls: "icon-ok",
                         handler: function () {
-                            //  $.messager.alert("添加", "添加成功");
-                           
+                            $.messager.confirm("提示", "确定修改吗？", function (r)
+                            {
+                                if(r){
+                                    $("#editForm").submit();
+                                }
+                            }); 
+                         
+                            
                         }
                     }, {
                         text: "Cancel",
@@ -245,7 +253,7 @@
 
 
                 });
-            }
+            
             
 
         }
@@ -254,7 +262,13 @@
             $("#dg").datagrid("reload");
 
         }
-
+        //将序列化成json格式后日期(毫秒数)转成日期格式
+        function ChangeDateFormat(cellval) {
+            var date = new Date(parseInt(cellval.replace("/Date(", "").replace(")/", ""), 10));
+            var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
+            var currentDate = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+            return date.getFullYear() + "-" + month + "-" + currentDate;
+        }
     </script>
  
 </body>
