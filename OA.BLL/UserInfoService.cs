@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using OA.IBLL;
 using OA.Model;
+using OA.Model.SearchParams;
 
 namespace OA.BLL
 {
@@ -30,6 +31,23 @@ namespace OA.BLL
             return this.DbSession.SaveChanges();
         }
 
+        #region 多条件搜索
+        public IQueryable<UserInfo> LoadSearchUserInfo(UserInfoFilter userInfoFilter)
+        {
+            var temp = this.DbSession.UserInfoDal.LoadEntities(c=>true);
+            if (!string.IsNullOrEmpty(userInfoFilter.UName))
+            {
+                temp = temp.Where<UserInfo>(u=>u.UName.Contains(userInfoFilter.UName));
+            }
+            if (!string.IsNullOrEmpty(userInfoFilter.URemark))
+            {
+                temp = temp.Where<UserInfo>(u => u.Remark.Contains(userInfoFilter.URemark));
+            }
+            userInfoFilter.TotalCount = temp.Count();
+
+            return temp.OrderBy<UserInfo, string>(u => u.Sort).Skip<UserInfo>((userInfoFilter.PageIndex - 1) * userInfoFilter.PageSize).Take<UserInfo>(userInfoFilter.PageSize);
+        }
+        #endregion
 
 
     }

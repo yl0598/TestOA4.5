@@ -28,11 +28,12 @@
         <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="Add()">增加</a>
         <a href="#" class="easyui-linkbutton" iconCls="icon-cut" plain="true" onclick="Delete()">删除</a>
         <a href="#" class="easyui-linkbutton" iconCls="icon-save" plain="true" onclick="Edit()">修改</a>
+        用户名：<input id="txtSUName" type="text" />&nbsp;&nbsp;备注：<input id="txtSURemark" type="text"/><input type="button"  value="搜索" onclick="btnSearch()"/>
     </div>
 
 
-    @*<div class="panel datagrid panel-htop" style="padding:50px 50px;">*@
-        <table id="dg" title="用户表" class="easyui-datagrid" style="width:700px;height:400px;margin:50px 50px;"
+   
+        <table id="dg" title="用户表" class="easyui-datagrid" style="width:700px;height:400px;margin:50px 50px;" 
                idField="ID" pageSize="5" pageList="[5,10,15]" fitColumns="true" rownumbers="true" pagination="true" toolbar="#tb" url="/UserInfo/GetUserInfo">
             <thead>
                 <tr>
@@ -87,7 +88,7 @@
                     </tr>
                     <tr>
                         <td>密码</td>
-                        <td><input type="password" name="UPwd" id="txtUPwd"/></td>
+                        <td><input type="text" name="UPwd" id="txtUPwd"/></td>
                     </tr>
                     <tr>
                         <td>状态</td>
@@ -111,26 +112,19 @@
         $(function () {
             $("#addDiv").css("display", "none");
             $("#editDiv").css("display", "none");
-        //    $("#dg").datagrid({
-        //        columns: [[
-        //            {
-        //                field: 'SubTime', formatter: function (s, row, index) {
-        //                    if (!s) return new Date();
-        //                    var ss = (s.split('-'));
-        //                    var y = parseInt(ss[0], 10);
-        //                    var m = parseInt(ss[1], 10);
-        //                    var d = parseInt(ss[2], 10);
-        //                    if (!isNaN(y) && !isNaN(m) && !isNaN(d)) {
-        //                        return new Date(y, m - 1, d);
-        //                    } else {
-        //                        return new Date();
-        //                    }
-        //                }
-        //            }
-        //        ]]
-        //    });
+          
+       
             
         });
+        function btnSearch() {
+            $("#dg").datagrid(
+                "load", {
+                    name: $("#txtSUName").val(),
+                    remark: $("#txtSURemark").val()
+                }
+            );
+        }
+     
         function formatdate(date, row,index) {
           
             return (eval(date.replace(/\/Date\((\d+)\)\//gi,"new Date($1)"))).pattern("yyyy-M-d");
@@ -216,7 +210,7 @@
             }
 
                 $("#editDiv").css("display", "block");
-                $("#addForm input").val("");
+           
                 $("#txtUName").val(rows[0].UName);
                 $("#txtUPwd").val(rows[0].UPwd);
                 $("#txtRemark").val(rows[0].Remark);
@@ -262,6 +256,8 @@
             $("#dg").datagrid("reload");
 
         }
+
+
         //将序列化成json格式后日期(毫秒数)转成日期格式
         function ChangeDateFormat(cellval) {
             var date = new Date(parseInt(cellval.replace("/Date(", "").replace(")/", ""), 10));

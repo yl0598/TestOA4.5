@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using OA.Model;
 using OA.Model.Enum;
+using OA.Model.SearchParams;
 
 namespace OA.WebApp.Controllers
 {
@@ -22,15 +23,26 @@ namespace OA.WebApp.Controllers
         {
             int pageIndex = int.Parse(Request["page"]);
             int pageSize = int.Parse(Request["rows"]);
-            int totalCount;
-            short deletetype = (short)DeleteEnumType.Nomal;
-            var userlist = userInfoService.LoadPageEntities<string>(pageIndex, pageSize, out totalCount, c => c.DelFlag == deletetype, c => c.Sort, true);
+            int totalCount=0;
+            string name = Request["name"];
+            string remark = Request["remark"];
+            UserInfoFilter userInfoFilter = new UserInfoFilter()
+            {
+                UName = name,
+                URemark=remark,
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                TotalCount = totalCount
+            };
+          var userlist=  userInfoService.LoadSearchUserInfo(userInfoFilter);
+          //  short deletetype = (short)DeleteEnumType.Nomal;
+          //  var userlist = userInfoService.LoadPageEntities<string>(pageIndex, pageSize, out totalCount, c => c.DelFlag == deletetype, c => c.Sort, true);
             var temp = from u in userlist
                        select new { ID = u.ID, UName = u.UName, UPwd = u.UPwd, Remark = u.Remark, SubTime = u.SubTime,DelFlag=u.DelFlag,Sort=u.Sort
  };
 
 
-            return Json(new { rows = temp, total = totalCount }, JsonRequestBehavior.AllowGet);
+            return Json(new { rows = temp, total = userInfoFilter.TotalCount }, JsonRequestBehavior.AllowGet);
 
         }
         #endregion
