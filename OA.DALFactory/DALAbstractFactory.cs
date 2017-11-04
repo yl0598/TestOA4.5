@@ -16,10 +16,10 @@ namespace OA.DALFactory
     {
         private static string DalNameSpace = ConfigurationManager.AppSettings["DalNameSpace"];//获取命名空间
         private static string DalAssembly = ConfigurationManager.AppSettings["DalAssembly"];
-        public static IUserInfoDal CreateUserInfo()
+        public static IBaseDal CreateModelInfo(string dalName)
         {
-            string fullClassName = DalNameSpace + ".UserInfoDal";
-            return CreateInstance(fullClassName, DalAssembly) as IUserInfoDal;
+            string fullClassName = DalNameSpace + "."+dalName;
+            return CreateInstance(fullClassName, DalAssembly) as IBaseDal;
 
         }
         private static object CreateInstance(string fullClassName, string assemblyPath)

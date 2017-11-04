@@ -11,19 +11,23 @@ namespace OA.BLL
 {
     public class UserInfoService : BaseService<UserInfo>, IUserInfoService
     {
-        public override void SetCurrentDal()
+        //public override void SetCurrentDal()
+        //{
+        //    CurrentDal = this.DbSession.UserInfoDal("UserInfoDal");
+        //}
+        public UserInfoService()
         {
-            CurrentDal = this.DbSession.UserInfoDal;
+            CurrentDal = this.DbSession.ModelInfoDal("UserInfoDal");
         }
 
         public bool DeleteEntities(List<int> list)
         {
-            var userInfos = this.DbSession.UserInfoDal.LoadEntities(u => list.Contains(u.ID));
+            var userInfos = this.DbSession.ModelInfoDal("UserInfoDal").LoadEntities(u => list.Contains(u.ID));
             if (userInfos != null)
             {
                 foreach (UserInfo userInfo in userInfos)
                 {
-                    this.DbSession.UserInfoDal.DeleteEntity(userInfo);
+                    this.DbSession.ModelInfoDal("UserInfoDal").DeleteEntity(userInfo);
                 }
 
             }
@@ -34,7 +38,7 @@ namespace OA.BLL
         #region 多条件搜索
         public IQueryable<UserInfo> LoadSearchUserInfo(UserInfoFilter userInfoFilter)
         {
-            var temp = this.DbSession.UserInfoDal.LoadEntities(c=>true);
+            var temp = this.DbSession.ModelInfoDal("UserInfoDal").LoadEntities(c=>true);
             if (!string.IsNullOrEmpty(userInfoFilter.UName))
             {
                 temp = temp.Where<UserInfo>(u=>u.UName.Contains(userInfoFilter.UName));

@@ -11,7 +11,7 @@ namespace OA.WebApp.Controllers
 {
     public class UserInfoController : Controller
     {
-        IBLL.IUserInfoService userInfoService = new BLL.UserInfoService();
+        IBLL.IUserInfoService userInfoService { get; set; }
         public ActionResult Index()
         {
 
@@ -102,6 +102,19 @@ namespace OA.WebApp.Controllers
         }
 
         #endregion
+
+        #region 展示修改数据
+        public ActionResult ShowEditInfo()
+        {
+            int id = int.Parse(Request["id"]);
+
+            var userInfo = userInfoService.LoadEntities(u=>u.ID==id).FirstOrDefault();
+
+            ViewData.Model = userInfo;
+            return View();
+
+        }
+#endregion
 
     }
 }

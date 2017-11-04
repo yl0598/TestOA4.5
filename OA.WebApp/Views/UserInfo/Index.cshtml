@@ -73,7 +73,7 @@
         }
     </div>
         <div id="editDiv">
-            @using (Ajax.BeginForm("EditUserInfo", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterEdit" }, new { id = "editForm" }))
+            @*@using (Ajax.BeginForm("EditUserInfo", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterEdit" }, new { id = "editForm" }))
             {
                 <table>
                     
@@ -103,7 +103,9 @@
                         <td><input type="text" name="Remark" id="txtRemark"/></td>
                     </tr>
                 </table>
-            }
+            }*@
+
+            <iframe id="editFrame" frameborder="0" scrolling="no" width="100%" height="100%"></iframe>
         </div>
 
 
@@ -209,21 +211,22 @@
                 return;
             }
 
-                $("#editDiv").css("display", "block");
-           
-                $("#txtUName").val(rows[0].UName);
-                $("#txtUPwd").val(rows[0].UPwd);
-                $("#txtRemark").val(rows[0].Remark);
-                $("#txtID").val(rows[0].ID);
-                $("#txtSubTime").val(ChangeDateFormat(rows[0].SubTime));
-                $("#txtSort").val(rows[0].Sort);
-                $("#txtDelFlag").val(rows[0].DelFlag);
+            $("#editDiv").css("display", "block");
+            
+                //$("#txtUName").val(rows[0].UName);
+                //$("#txtUPwd").val(rows[0].UPwd);
+                //$("#txtRemark").val(rows[0].Remark);
+                //$("#txtID").val(rows[0].ID);
+                //$("#txtSubTime").val(ChangeDateFormat(rows[0].SubTime));
+                //$("#txtSort").val(rows[0].Sort);
+            //$("#txtDelFlag").val(rows[0].DelFlag);
+            $("#editFrame").attr("src", "/UserInfo/ShowEditInfo/?id=" + rows[0].ID);
                 $("#editDiv").dialog({
                     title: "修改信息",
                     modal: true,
                     collapsible: true,
-                    width: 300,
-                    height: 250,
+                    width: 450,
+                    height: 550,
                     buttons: [{
 
                         text: "Edit",
@@ -232,7 +235,10 @@
                             $.messager.confirm("提示", "确定修改吗？", function (r)
                             {
                                 if(r){
-                                    $("#editForm").submit();
+                                    //$("#editForm").submit();
+                                    var childWindow = $("#editFrame")[0].contentWindow;//获取子窗体window对象
+
+                                    childWindow.subEditForm();
                                 }
                             }); 
                          

@@ -11,7 +11,7 @@ namespace OA.DAL
 {
     public class BaseDal<T> where T : class, new()
     {
-        DbContext Db = DBContextFactory.CreateDbContext();//完成EF上下文创建.
+        DbContext Db =DBContextFactory.CreateDbContext() ;//完成EF上下文创建.
         /// <summary>
         /// 添加数据
         /// </summary>

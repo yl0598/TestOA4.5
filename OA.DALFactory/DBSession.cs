@@ -14,23 +14,23 @@ namespace OA.DALFactory
         //  DbContext Db = new OAEntities();
         public DbContext Db { get { return DBContextFactory.CreateDbContext(); } }
 
-        private IUserInfoDal _UserInfoDal;
+        private IBaseDal _ModelInfoDal;
 
 
-        public IUserInfoDal UserInfoDal
+        public IBaseDal ModelInfoDal(string dalName)
         {
 
-            get
-            {
-                if (_UserInfoDal == null)
+           
+            
+                if (_ModelInfoDal == null)
                 {
-                    _UserInfoDal = DALAbstractFactory.CreateUserInfo();
+                _ModelInfoDal = DALAbstractFactory.CreateModelInfo(dalName);
 
                 }
-                return _UserInfoDal;
-            }
+                return _ModelInfoDal;
+           
 
-            set { _UserInfoDal = value; }
+         
         }
 
 

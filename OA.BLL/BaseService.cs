@@ -9,7 +9,7 @@ using OA.IDAL;
 
 namespace OA.BLL
 {
-    public abstract class BaseService<T> where T : class, new()
+    public  class BaseService<T> where T : class, new()
     {
         public IDBSession DbSession
         {
@@ -22,9 +22,9 @@ namespace OA.BLL
 
         public IDAL.IBaseDal<T> CurrentDal { get; set; }
 
-        public abstract void SetCurrentDal();
+       // public abstract void SetCurrentDal();
 
-        public BaseService() { SetCurrentDal(); }//子类必须实现该抽象方法
+//        public BaseService() { SetCurrentDal(); }//子类必须实现该抽象方法
         /// <summary>
         /// 查询
         /// </summary>

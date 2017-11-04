@@ -7,7 +7,7 @@ using OA.Model;
 
 namespace OA.IDAL
 {
-    public interface IUserInfoDal : IBaseDal<UserInfo>
+    public interface IBaseDal : IBaseDal<UserInfo>
     {
 
     }

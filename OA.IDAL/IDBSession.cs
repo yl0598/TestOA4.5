@@ -8,8 +8,8 @@ namespace OA.IDAL
 {
     public interface IDBSession
     {
-         
-        IUserInfoDal UserInfoDal { get; set; }
+
+        IBaseDal ModelInfoDal(string dalName);
         bool SaveChanges();
 
     }

@@ -8,7 +8,7 @@ using OA.Model;
 
 namespace OA.DAL
 {
-   public class UserInfoDal : BaseDal<UserInfo>, IUserInfoDal
+   public class UserInfoDal : BaseDal<UserInfo>, IBaseDal
     {
     }
 }
