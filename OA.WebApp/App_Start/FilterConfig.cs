@@ -1,4 +1,5 @@
-﻿using System.Web;
+﻿using OA.WebApp.Models;
+using System.Web;
 using System.Web.Mvc;
 
 namespace OA.WebApp
@@ -7,7 +8,8 @@ namespace OA.WebApp
     {
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
-            filters.Add(new HandleErrorAttribute());
+            //filters.Add(new HandleErrorAttribute());
+            filters.Add(new MyExecptionAttribute());//使用自定义异常处理过滤
         }
     }
 }
