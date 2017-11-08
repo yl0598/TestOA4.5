@@ -176,6 +176,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\UserInfoController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -188,6 +189,22 @@
     <Content Include="Config\service.xml" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Images\3DSMAX.png" />
+    <Content Include="Content\Images\7_7.jpg" />
+    <Content Include="Content\Images\Alien Folder.png" />
+    <Content Include="Content\Images\applebg.jpg" />
+    <Content Include="Content\Images\bg.png" />
+    <Content Include="Content\Images\bg3.png" />
+    <Content Include="Content\Images\big.png" />
+    <Content Include="Content\Images\blue_glow.jpg" />
+    <Content Include="Content\Images\login\HeadBack.jpg" />
+    <Content Include="Content\Images\login\login-btn.gif" />
+    <Content Include="Content\Images\login\panel-c.gif" />
+    <Content Include="Content\Images\login\panel-f.gif" />
+    <Content Include="Content\Images\login\panel-h.gif" />
+    <Content Include="Content\Images\logo.gif" />
+    <Content Include="Content\Images\Program Files Folder.png" />
+    <Content Include="Content\Images\Xp-G5 006.png" />
     <Content Include="Content\themes\black\accordion.css" />
     <Content Include="Content\themes\black\calendar.css" />
     <Content Include="Content\themes\black\combo.css" />
@@ -563,6 +580,8 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\themes\material\images\Thumbs.db" />
+    <Content Include="Content\Images\login\vssver2.scc" />
+    <Content Include="Content\Images\vssver2.scc" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\datapattern.js" />
     <Content Include="Scripts\easyui-lang-zh_CN.js" />
@@ -595,6 +614,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\UserInfo\Index.cshtml" />
     <Content Include="Views\UserInfo\ShowEditInfo.cshtml" />
+    <Content Include="Views\Login\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -619,6 +639,10 @@
     <ProjectReference Include="..\OA.BLL\OA.BLL.csproj">
       <Project>{32d9ef9b-958d-4a22-98de-35230a0a010d}</Project>
       <Name>OA.BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OA.Common\OA.Common.csproj">
+      <Project>{ce5f60f8-21dc-445a-a0eb-842ccea365a5}</Project>
+      <Name>OA.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\OA.IBLL\OA.IBLL.csproj">
       <Project>{20862aff-018b-4d13-b0fb-833fab9d47cb}</Project>
